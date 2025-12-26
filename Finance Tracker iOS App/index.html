@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Finance Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="topbar">
+    <h1 style="margin:0;">Personal Finance Tracker</h1>
+
+    <button id="themeToggleBtn" class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
+      <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <span class="visually-hidden">Toggle theme</span>
+    </button>
+  </div>
+
+  <div id="tabs">
+    <button onclick="showTab('dashboard')" class="active">Dashboard</button>
+    <button onclick="showTab('income')">Income</button>
+    <button onclick="showTab('fixed')">Fixed Expenses</button>
+    <button onclick="showTab('variable')">Variable Expenses</button>
+    <button onclick="showTab('history')">History</button>
+    <button onclick="showTab('savings')">Savings</button>
+    <button onclick="showTab('networth')">Net Worth</button>
+    <button onclick="showTab('design')">Design</button>
+  </div>
+  <hr>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardTab">
+    <div class="dashboard-header">
+      <h2 style="margin:0;">Dashboard</h2>
+      <div class="dashboard-month-subtle"><strong id="dashboardMonthLabelWrap"> </strong><span id="dashboardMonthLabel"></span></div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="card-title">Money Left (Monthly)</div>
+        <p class="big-number">£<span id="dashboardMoneyLeft">0</span></p>
+        <div class="small-metrics" style="margin-top:12px;">
+          <div class="metric">
+            <div class="metric-label">Fixed</div>
+            <div class="metric-value">£<span id="smallFixed">0</span></div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Variable</div>
+            <div class="metric-value">£<span id="smallVariable">0</span></div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Savings Rate</div>
+            <div class="metric-value"><span id="savingsRateSmall">0%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Monthly Summary</div>
+        <p class="subtle"><strong>Monthly Total Income:</strong> £<span id="totalIncomeMonthly">0</span></p>
+        <p class="subtle"><strong>Monthly Expenses:</strong> £<span id="totalExpenses">0</span></p>
+        <p class="subtle"><strong>Yearly Total Income:</strong> £<span id="totalIncomeYearly">0</span></p>
+        <p class="subtle" style="margin-top:8px;">
+          <strong>General spending month:</strong> <span id="dashboardGeneralMonthLabel"></span>
+        </p>
+      </div>
+    </div>
+
+    <h3>Savings and Investments Overview</h3>
+    <div class="grid three">
+      <div class="card">
+          <div class="card-title">Cash</div>
+          <p class="big-number"><span class="currency">£</span><span id="dashCash">0</span></p>
+      </div>
+      <div class="card">
+          <div class="card-title">Investments</div>
+          <p class="big-number"><span class="currency">£</span><span id="dashInvest">0</span></p>
+      </div>
+      <div class="card">
+          <div class="card-title">Crypto</div>
+          <p class="big-number"><span class="currency">£</span><span id="dashCrypto">0</span></p>
+      </div>
+    </div>
+
+    <div class="summary" style="margin-top:12px;">
+      <p class="subtle" style="margin: 4px;;">
+        Check the <strong>Net Worth</strong> tab for a complete picture.
+      </p>
+    </div>
+
+    <button class="add-btn" onclick="quickAddPrompt()">Quick Add Expense (goes into selected month)</button>
+  </div>
+
+  <!-- INCOME -->
+  <div id="incomeTab" style="display:none;">
+    <h2>Income</h2>
+
+    <div class="summary">
+      <p><strong>Monthly Total Income:</strong> £<span id="incomeMonthlyTotal">0</span></p>
+      <p><strong>Yearly Total Income:</strong> £<span id="incomeYearlyTotal">0</span></p>
+    </div>
+
+    <h3>Add income stream</h3>
+    <div class="row">
+      <label>Name <input id="incomeName" placeholder="Bob Salary"></label>
+      <label>Amount (£) <input id="incomeAmount" type="number" placeholder="2500"></label>
+      <label>
+        Frequency
+        <select id="incomeFreq">
+          <option value="monthly" selected>Monthly</option>
+          <option value="weekly">Weekly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </label>
+      <button id="addIncomeBtn" class="add-btn">Add Income</button>
+    </div>
+
+    <h4>Income streams</h4>
+    <ul id="incomeList" style="padding-left:0;"></ul>
+  </div>
+
+  <!-- FIXED -->
+  <div id="fixedTab" style="display:none;">
+    <h2>Fixed Expenses <span class="subtle" style="font-size:0.95rem; margin-left:8px;">Monthly Re-occuring bills and Subscriptions etc</span></h2>
+    <div class="fixed-total-small" style="margin:8px 0 10px;">Total fixed: <span class="fixed-total-currency">£</span><span id="fixedTotal">0</span></div>
+    <div class="fixed-category-summary" style="margin:8px 0 12px;"> 
+      <div id="fixedCategorySummary"></div>
+      <label style="float:right; margin-left:12px;">Filter
+        <select id="fixedFilter">
+          <option value="All">All</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label>Name <input id="fixedName" placeholder="Mortgage"></label>
+      <label>Amount (£) <input id="fixedAmount" type="number" placeholder="1200"></label>
+      <label>Category
+        <select id="fixedCategory">
+          <option value="Utilities">Utilities</option>
+          <option value="Housing">Housing</option>
+          <option value="Subscriptions">Subscriptions</option>
+          <option value="Transport">Transport</option>
+          <option value="Non-essentials">Non-essentials</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+      <button id="addFixedBtn" class="add-btn">Add Expense</button>
+    </div>
+    <ul id="fixedList"></ul>
+  </div>
+
+  <!-- VARIABLE / GENERAL -->
+  <div id="variableTab" style="display:none;">
+    <h2>General Expenses</h2>
+
+    <h3>Variable / Discretionary</h3>
+    <div class="row">
+      <label>Name <input id="variableName" placeholder="Subscription"></label>
+      <label>Amount (£) <input id="variableAmount" type="number" placeholder="50"></label>
+      <button id="addVariableBtn" class="add-btn">Add Variable</button>
+    </div>
+    <ul id="variableList"></ul>
+
+    <div class="month-bar">
+      <label>
+        Viewing month
+        <select id="generalMonthSelect"></select>
+      </label>
+      <button id="jumpCurrentMonthBtn" class="add-btn" type="button">Jump to current month</button>
+      <div class="note">
+        General spending is stored per month. When the month changes, this list automatically starts fresh.
+      </div>
+    </div>
+
+    <ul id="variableList"></ul>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="historyTab" style="display:none;">
+    <h2>History</h2>
+    <div class="summary">
+      <p class="subtle" style="margin:0;">
+        Month-by-month overview. Click <strong>View month</strong> to jump to that month’s General Spending.
+      </p>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
+  <!-- SAVINGS -->
+<div id="savingsTab" style="display:none;">
+  <h2>Savings / Investments</h2>
+
+  <p class="subtle" style="margin:6px 0 12px;">Add multiple accounts. Crypto tracks coins + invested.</p>
+  <!-- Totals will appear inline next to each section header for clarity -->
+
+  <!-- Overall totals for savings (appears above section headers) -->
+  <div class="section-total-overall">Total across all savings: £<span id="savingsTotalAll">0</span></div>
+
+  <h3 class="section-header">Savings accounts <span class="section-total">£<span id="savingsTotalCash">0</span></span></h3>
+  <div class="row">
+    <label>Account name <input id="cashAccountName" placeholder="Emergency Fund / Monzo / Chase"></label>
+    <label>Balance (£) <input id="cashAccountValue" type="number" placeholder="2500"></label>
+    <button id="addCashAccountBtn" class="add-btn" type="button">Add Savings Account</button>
+  </div>
+  <ul id="cashAccountsList" style="padding-left:0;"></ul>
+
+  <h3 class="section-header" style="margin-top:18px;">Investment accounts <span class="section-total">£<span id="savingsTotalInvest">0</span></span></h3>
+  <div class="row">
+    <label>Account name <input id="investAccountName" placeholder="Vanguard ISA"></label>
+    <label>Value (£) <input id="investAccountValue" type="number" placeholder="12000"></label>
+    <button id="addInvestAccountBtn" class="add-btn" type="button">Add Investment</button>
+  </div>
+  <ul id="investAccountsList" style="padding-left:0;"></ul>
+
+  <h3 class="section-header" style="margin-top:18px;">Crypto holdings <span class="section-total">£<span id="savingsTotalCrypto">0</span></span></h3>
+  <div class="row">
+    <label>Coin / Token <input id="cryptoName" placeholder="Bitcoin"></label>
+    <label>Coins / Tokens <input id="cryptoCoins" type="number" step="any" placeholder="0.25"></label>
+    <label>Total invested (£) <input id="cryptoInvested" type="number" placeholder="5000"></label>
+    <button id="addCryptoBtn" class="add-btn" type="button">Add Crypto</button>
+  </div>
+
+  <ul id="cryptoHoldingsList" style="padding-left:0;"></ul>
+  
+</div>
+
+
+
+  <!-- NET WORTH -->
+  <div id="networthTab" style="display:none;">
+    <h2>Net Worth <span class="wip-note">Work in progress</span></h2>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="card-title">Total Net Worth</div>
+        <p class="big-number">£<span id="netWorthTotal">0</span></p>
+        <p class="subtle">Cash + Investments + Crypto</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Breakdown</div>
+        <p class="subtle"><strong>Cash:</strong> £<span id="netWorthCash">0</span></p>
+        <p class="subtle"><strong>Investments:</strong> £<span id="netWorthInvest">0</span></p>
+        <p class="subtle"><strong>Crypto:</strong> £<span id="netWorthCrypto">0</span></p>
+        <p class="subtle" style="margin-top:10px;">
+          Tip: update values in the <strong>Savings</strong> tab.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN -->
+  <div id="designTab" style="display:none;">
+    <h2>Design</h2>
+
+    <div class="summary">
+      <p class="subtle" style="margin:0;">
+        Adjust the look & feel. Changes save automatically in your browser.
+      </p>
+    </div>
+
+    <div class="row">
+      <label>Font size <input id="uiFontSize" type="range" min="14" max="20" value="16"></label>
+      <label>Corner roundness <input id="uiRadius" type="range" min="10" max="26" value="16"></label>
+      <label>Density (padding) <input id="uiPad" type="range" min="8" max="18" value="12"></label>
+    </div>
+
+    <button id="resetDesignBtn" class="delete-btn" type="button">Reset design</button>
+  </div>
+
+<script src="js/app.js"></script>
+
+
+</body>
+</html>

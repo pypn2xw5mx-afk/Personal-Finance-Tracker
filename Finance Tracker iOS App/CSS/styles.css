@@ -1,0 +1,510 @@
+/* =========================
+   THEME TOKENS (ONE PLACE)
+========================== */
+:root{
+  /* Light theme */
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --panel-2: #f8f9fc;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: rgba(15, 23, 42, 0.10);
+
+  --primary: #2563eb;
+  --primary-2: #1d4ed8;
+  --danger: #ef4444;
+
+  /* Adjustable UI tokens */
+  --radius: 16px;
+  --pad: 12px;
+  --font-size: 16px;
+
+  --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+  --accent-rose: #fb7185;
+  --accent-green: #10b981;
+}
+
+[data-theme="dark"]{
+  /* Dark theme overrides */
+  --bg: #0b1220;
+  --panel: #0f172a;
+  --panel-2: #111c33;
+  --text: #e5e7eb;
+  --muted: #9aa4b2;
+  --border: rgba(148, 163, 184, 0.18);
+
+  --primary: #60a5fa;
+  --primary-2: #3b82f6;
+  --danger: #fb7185;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --accent-rose: #fda4b4;
+  --accent-green: #34d399;
+}
+
+/* =========================
+   BASE
+========================== */
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-size);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h2, h3, h4{ margin-top: 0; }
+
+hr{
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 14px 0 18px;
+}
+
+.subtle, .muted, .note{ color: var(--muted); }
+
+/* Panels */
+.card, .summary, .month-bar, .income-item, .history-row{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: calc(var(--pad) * 0.9);
+}
+
+.card-title{
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.big-number{
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* Dashboard cash/invest/crypto figures use accent green */
+.big-number .currency,
+.big-number span#dashCash,
+.big-number span#dashInvest,
+.big-number span#dashCrypto{
+  color: var(--accent-green);
+  font-weight: 900;
+}
+
+/* Inputs */
+input, select{
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 6px);
+  padding: calc(var(--pad) * 0.55);
+  min-height: 36px;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+button{
+  padding: calc(var(--pad) * 0.55) calc(var(--pad) * 0.9);
+  font-weight: 650;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform .12s ease, background .15s ease;
+  min-height: 36px;
+}
+button:active{ transform: scale(.99); }
+
+.add-btn{
+  background: var(--primary);
+  color: #fff;
+  border: none;
+}
+.add-btn:hover{ background: var(--primary-2); }
+
+.save-btn{
+  background: var(--primary);
+  color: #fff;
+  border: none;
+}
+
+.delete-btn{
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+/* =========================
+   TABS
+========================== */
+#tabs{
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+#tabs button{
+  flex: 1;
+  min-width: 140px;
+}
+
+#tabs button.active{
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* =========================
+   LAYOUT HELPERS
+========================== */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+/* Dashboard header: title left, current month/year right */
+.dashboard-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.dashboard-month-subtle{
+  color: var(--muted);
+  font-weight:600;
+  font-size:0.95rem;
+}
+
+/* Small metric tiles below Money Left */
+.small-metrics{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+/* Inline list style: minimal, no inner panels */
+.small-metrics .metric{
+  background: transparent;
+  border: none;
+  padding: 0;
+  min-width: auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.small-metrics .metric:not(:last-child)::after{
+  content: "·";
+  color: var(--muted);
+  margin-left: 8px;
+}
+.small-metrics .metric-label{ color: var(--muted); font-size:0.9rem; margin-right:4px; }
+.small-metrics .metric-value{ font-weight:800; font-size:1.05rem; }
+
+.grid{ display: grid; gap: 12px; }
+.grid.two{ grid-template-columns: 1fr 1fr; }
+.grid.three{ grid-template-columns: 1fr 1fr 1fr; }
+
+@media (max-width: 720px){
+  .grid.two, .grid.three{ grid-template-columns: 1fr; }
+}
+
+.row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.row label{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+ul{ padding-left: 20px; }
+li{ margin: 8px 0; }
+
+.income-item{ list-style: none; margin-bottom: 10px; }
+
+.income-item-top{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.pill{
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel-2);
+  margin-right: 6px;
+  font-size: 0.9em;
+}
+
+.month-bar{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.month-bar .note{
+  flex: 1;
+  min-width: 260px;
+}
+
+/* History rows */
+.history-row{
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 160px 1fr 1fr 1fr 130px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+@media (max-width: 720px){
+  .history-row{ grid-template-columns: 1fr; }
+}
+.history-row .btn{ justify-self: end; }
+@media (max-width: 720px){
+  .history-row .btn{ justify-self: start; }
+}
+
+/* =========================
+   THEME TOGGLE
+========================== */
+.theme-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:44px;
+  height:36px;
+  padding:6px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor:pointer;
+  transition: background .15s, transform .12s;
+}
+.theme-toggle:active{ transform: scale(.98); }
+.theme-toggle .icon{ width:18px; height:18px; display:block; transition:opacity .18s, transform .18s; }
+.theme-toggle .icon-moon{ opacity:0; transform: translateY(-4px) scale(.9); }
+.theme-toggle.is-dark .icon-moon{ opacity:1; transform: translateY(0) scale(1); }
+.theme-toggle.is-dark .icon-sun{ opacity:0; transform: translateY(4px) scale(.9); }
+.theme-toggle .icon-sun{ opacity:1; transform: translateY(0) scale(1); }
+
+.visually-hidden{
+  position:absolute !important;
+  height:1px;
+  width:1px;
+  overflow:hidden;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+  border:0;
+  padding:0;
+  margin:-1px;
+}
+
+/* Savings section header totals */
+.section-header{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+.section-header .section-total{
+  font-weight:700;
+  color: var(--muted);
+  background: transparent;
+}
+.section-total > span{ /* inner numeric span */
+  font-weight:800;
+  color: var(--text);
+}
+.section-total-overall{
+  display: block;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 10px 0 10px;
+  padding: 8px 12px;
+  border-radius: calc(var(--radius) - 8px);
+  background: var(--panel-2);
+  border-left: 4px solid var(--accent-green);
+}
+
+.section-total-overall .label{ font-weight:800; }
+.section-total-overall #savingsTotalAll{
+  color: var(--accent-green);
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+
+/* Small inline note for in-progress sections */
+.wip-note{
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Slightly stronger separation for headers */
+.section-header{ padding: 6px 8px; }
+.card-title{ color: var(--primary-2); }
+
+/* =========================
+   LISTS (CLEAN + CONSISTENT)
+   Add this at the BOTTOM
+========================== */
+
+/* Make list containers consistent */
+ul{
+  padding-left: 0;
+  margin: 10px 0 0;
+}
+
+/* Each item becomes a little "row card" */
+li{
+  list-style: none;
+  margin: 10px 0;
+  padding: calc(var(--pad) * 0.9);
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  border-radius: calc(var(--radius) - 6px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* The label/value text should take the remaining space */
+li::before{ content: none; } /* ensure no bullets */
+li{
+  line-height: 1.25;
+}
+li > .item-text{
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Compact income row styling */
+.income-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+}
+.income-row .item-actions{ display:flex; gap:8px; }
+.income-row .item-actions button{ padding:6px 10px; min-height:32px; }
+
+/* Buttons inside list items */
+li button{
+  margin: 0;
+}
+
+/* Optional: make delete buttons a bit more compact */
+li .delete-btn,
+li .add-btn,
+li .save-btn{
+  white-space: nowrap;
+}
+
+/* Fixed expenses modern row */
+.fixed-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.fixed-row{ background: transparent; border: none; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.fixed-row .fixed-amount{
+  font-weight:800;
+  font-size:1.05rem;
+  color: var(--text);
+  min-width:120px;
+  text-align:right;
+}
+
+/* Prominent but soft-styled fixed total */
+.fixed-total-small{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-weight:700;
+  border: 1px solid var(--border);
+}
+.fixed-total-small .fixed-total-currency,
+.fixed-total-small span#fixedTotal{
+  color: var(--accent-rose);
+  font-size:1.35rem;
+  font-weight:900;
+  line-height:1;
+}
+
+/* Ensure fixed inputs match category select height and spacing */
+#fixedName, #fixedAmount, #fixedCategory{
+  height: 36px;
+  min-height: 36px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+
+/* Category summary boxes for Fixed expenses */
+.category-summary-box{
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.category-summary-box .summary-label{ font-weight:700; color:var(--muted); }
+.category-summary-box .summary-value{ font-weight:800; color:var(--accent-rose); }
+.fixed-row .item-actions{ display:flex; gap:8px; }
+.fixed-row .item-actions button{ padding:6px 10px; min-height:34px; }
+
+/* If you want list buttons smaller than main buttons */
+li button{
+  padding: 8px 12px;
+  min-height: 34px;
+}
+
+/* Make history rows a little flatter vs cards (optional) */
+.history-row{
+  background: var(--panel);
+}
+
+/* Small screens: stack buttons more nicely */
+@media (max-width: 720px){
+  li{
+    align-items: stretch;
+  }
+  li button{
+    width: 100%;
+  }
+}
